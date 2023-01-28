@@ -1,10 +1,9 @@
 # encoding=utf8
 import io
-import re
-import sys
-import time
 import json
 import subprocess
+import sys
+
 import requests
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
