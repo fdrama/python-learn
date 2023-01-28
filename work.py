@@ -22,15 +22,14 @@ if __name__ == '__main__':
         div_id = 'con_one_' + lid[len(lid) - 1]
         div = content_box.find('div', id=div_id)
         links = div.find_all('a')
-        linkList = []
+        link_detail_list = []
         for link in links:
-            linkDoc = {link.text: link['href']}
-            linkList.append(linkDoc)
-        menu_dict[li.text] = linkList
+            link_detail = {link.text: link['href']}
+            link_detail_list.append(link_detail)
+        menu_dict[li.text] = link_detail_list
 
-    # print(json.dumps(linkDict))
-    # with open('format.json', 'w', encoding='utf-8') as w:
-    #     w.write(json.dumps(linkDict, indent=4, ensure_ascii=False))
+    with open('menu_dict.json', 'w', encoding='utf-8') as w:
+        w.write(json.dumps(menu_dict, indent=4, ensure_ascii=False))
 
     menu_doc = {}
     for k, v in menu_dict.items():
@@ -59,17 +58,18 @@ if __name__ == '__main__':
                 trs = tbody.find_all('tr')
                 # 遍历 tr
                 articles = []
-                for tr in trs:
+                for index, th in enumerate(ths):
                     # 选择 td
+                    tr = trs[index]
                     tds = tr.find_all('td')
                     attr = {}
                     for td in tds:
                         data_tabel = td['data-tabel']
-                        if td.text == '查看正文':
+                        if th.text == '内容':
                             a = td.find('a')
-                            attr[td.text] = a['href']
+                            attr[th.text] = a['href']
                         else:
-                            attr[data_tabel] = td.text
+                            attr[data_tabel] = th.text
                     articles.append(attr)
                 doc_dict[name] = articles
             doc_list.append(doc_dict)
