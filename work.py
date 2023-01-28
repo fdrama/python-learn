@@ -58,25 +58,32 @@ if __name__ == '__main__':
                 trs = tbody.find_all('tr')
                 # 遍历 tr
                 articles = []
+
                 for index, th in enumerate(ths):
                     # 选择 td
-                    tr = trs[index]
-                    tds = tr.find_all('td')
-                    attr = {}
-                    for td in tds:
-                        data_tabel = td['data-tabel']
-                        if th.text == '内容':
-                            a = td.find('a')
-                            attr[th.text] = a['href']
-                        else:
-                            attr[data_tabel] = th.text
-                    articles.append(attr)
-                doc_dict[name] = articles
-            doc_list.append(doc_dict)
+                    if len(trs) > index:
+                        tr = trs[index]
+                        tds = tr.find_all('td')
+                        attr = {}
+                        text = th.text.strip();
+                        print("index ,  th ", index, th.text.strip())
+                        for td in tds:
+                            data_tabel = td['data-tabel']
+                            if text == '内容':
+                                a = td.find('a')
+                                if not a:
+                                    attr[text] = ''
+                                else:
+                                    attr[text] = a['href']
+                            else:
+                                attr[text] = data_tabel
+                        articles.append(attr)
+                    doc_dict[name] = articles
+                doc_list.append(doc_dict)
 
-            with open('doc.json', 'w', encoding='utf-8') as w:
-                w.write(json.dumps(doc_list, indent=4, ensure_ascii=False))
-        menu_doc[k] = doc_list
-        with open('menu_doc.json', 'w', encoding='utf-8') as w:
-            w.write(json.dumps(menu_doc, indent=4, ensure_ascii=False))
+                with open('doc.json', 'w', encoding='utf-8') as w:
+                    w.write(json.dumps(doc_list, indent=4, ensure_ascii=False))
+            menu_doc[k] = doc_list
+            with open('menu_doc.json', 'w', encoding='utf-8') as w:
+                w.write(json.dumps(menu_doc, indent=4, ensure_ascii=False))
         break
